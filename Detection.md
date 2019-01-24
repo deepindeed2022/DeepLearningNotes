@@ -1,13 +1,13 @@
 # 物体检测算法
 
-![@物体检测算法概览图](./1548295000675.png)
+![@物体检测算法概览图](./images/Detection-All.png)
 
 ## 基于region proposals的方法（Two-Stage方法）
 - RCNN => Fast RCNN => Faster RCNN => FPN 
 - https://www.cnblogs.com/liaohuiqiang/p/9740382.html
 
 ### faster RCNN
-![@faster RCNN的算法过程图](./1548295356118.png)
+![@faster RCNN的算法过程图](./images/FasterRCNN.png)
 
 ## One-stage方法
 
@@ -31,7 +31,7 @@ $rcnn$主要作用就是用于物体检测，就是首先通过$selective search
 
 ### SPPNet
 
-![Alt text](./20161218124511498.png)
+![Alt text](./images/SPPNet.png)
 如果对selective search(ss)提供的2000多个候选区域都逐一进行卷积处理，势必会耗费大量的时间，所以他觉得，能不能我们先对一整张图进行卷积得到特征图，然后再将ss算法提供的2000多个候选区域的位置记录下来，通过比例映射到整张图的feature map上提取出候选区域的特征图B,然后将B送入到金字塔池化层中，进行权重计算.
 
 然后经过尝试，这种方法是可行的，于是在RCNN基础上，进行了这两个优化得到了这个新的网络sppnet.
@@ -40,20 +40,20 @@ $rcnn$主要作用就是用于物体检测，就是首先通过$selective search
 
 NMS算法，非极大值抑制算法，引入NMS算法的目的在于：根据事先提供的 score 向量，以及 regions（由不同的 bounding boxes，矩形窗口左上和右下点的坐标构成） 的坐标信息，从中筛选出置信度较高的 bounding boxes。
 
-![@FasterRCNN中的NMS的作用](./FasterRCNN-NMS的作用.JPG)
+![@FasterRCNN中的NMS的作用](./images/FasterRCNN_NMS.jpeg)
 
-![@FasterRCNN中anchor推荐框的个数](./FasterRCNN的anchor.JPG)
+![@FasterRCNN中anchor推荐框的个数](./images/FasterRCNN_anchor.jpeg)
 Faster RCNN中输入s=600时，采用了三个尺度的anchor进行推荐，分别时128,256和512，其中推荐的框的个数为$1106786$，需要将这$1100k$的推荐框合并为$2k$个。这个过程其实正是$RPN$神经网络模型。
 
 ### SSD
 
 https://blog.csdn.net/wfei101/article/details/78176322
 SSD算法中是分为default box(下图中(b)中为default box示意图)和prior box(实际推荐的框)
-![Alt text](./20170619101627242.png)
+![@SSD算法中的anchor box和default box示意图](./images/SSD-1.png)
 
-![Alt text](./20170619101826504.png)
+![@SSD算法架构图](./images/SSD-2.png)
 
-![SSD算法推荐框的个数](./捕获.PNG)
+![SSD算法推荐框的个数](./images/SSD-3.PNG)
 
 ### 注意
 

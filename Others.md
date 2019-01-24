@@ -8,11 +8,11 @@ https://github.com/p-christ/Deep-Reinforcement-Learning-Algorithms-with-PyTorch
 
 
 ### NVLink 拓扑结构图
-![Alt text](./1543133607397.png)
+![Alt text](./images/NVLINK.png)
 
 ### RMDA原理介绍
 
-![Alt text](./1543133669959.png)
+![Alt text](./images/RMDA.png)
 
 ### 应用RMDA的拓扑结构图
-![Alt text](./1543133960372.png)
+![Alt text](./images/RMDA-All.png)

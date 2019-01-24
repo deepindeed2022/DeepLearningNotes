@@ -21,7 +21,7 @@ A1: 其实CNN是具有一定的旋转不变性，其实之所以有旋转不变�
 > 关于平移不变性 ，对于CNN来说，如果移动一张图片中的物体，那应该是不太一样的。假设物体在图像的左上角，我们做卷积，采样都不会改变特征的位置，糟糕的事情在我们把特征平滑后后接入了全连接层，而全连接层本身并不具备平移不变性的特征。但是 CNN 有一个采样层，假设某个物体移动了很小的范围，经过采样后，它的输出可能和没有移动的时候是一样的，这是 CNN 可以有小范围的平移不变性 的原因。
 
 一个空间变换器的运作机制可以分为三个部分，如下图所示：1） 本地网络（Localisation Network）；2）网格生成器( Grid Genator)；3）采样器（Sampler）。
-![STN](./1548208580847.png)
+![STN](./images/STN.png)
 
 - 论文出处：https://arxiv.org/abs/1506.02025
 - [Spatial Transformer Network paperblog](https://www.cnblogs.com/liaohuiqiang/p/9226335.html)
