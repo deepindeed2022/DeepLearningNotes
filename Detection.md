@@ -53,7 +53,7 @@ SSD算法中是分为default box(下图中(b)中为default box示意图)和prior
 
 ![@SSD算法架构图](./images/SSD-2.png)
 
-![SSD算法推荐框的个数](./images/SSD-3.PNG)
+![SSD算法推荐框的个数](./images/SSD-3.png)
 
 ### 注意
 
