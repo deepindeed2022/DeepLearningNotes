@@ -17,7 +17,8 @@ https://zhuanlan.zhihu.com/p/29321631
 
 
 ## SVD分解
-
+- 奇异值分解: https://zhuanlan.zhihu.com/p/31386807
+- https://en.wikipedia.org/wiki/Singular_value_decomposition
 
 
 ![@SVD分解示意图](./images/220px-Singular-Value-Decomposition.svg.png)
