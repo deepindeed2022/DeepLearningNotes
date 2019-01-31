@@ -79,6 +79,28 @@ $$||A||_F = \sqrt{\sum_{i,j}{A_{i,j}^2}}$$
 ~~换句话说就是希望模型在真实数据上预测的结果误差越小越好。我们把模型在真实环境中的误差叫做泛化误差，~~
 ~~最终的目的是希望训练好的模型泛化误差越低越好。~~
 
+## 基于梯度的优化算法
+
+### 梯度下降（一阶最优化算法）
+
+我们把要最小化或最大化的函数$f(x)$称为目标函数（objective function）或准则（criterion）。
+当我们对其进行最小化时，我们也把它称为代价函数（cost function）、损失函数（loss function）或误差函数（error function）。
+- x往导数的反方向移动一小步来减小$f(x)$。这种技术被称为梯度下降（gradient descent）
+- 使 f(x) 取得绝对的最小值（相对所有其他值）的点是全局最小点（global minimum）。函数可能只有一个全局最小点或存在多个全局最小点，还可能存在不是全局最优的局部极小点（local minimum）。
+![](./images/gradient_minimum.png)
+- 虽然梯度下降被限制在连续空间中的优化问题，但不断向更好的情况移动一小步（即近似最佳的小移动）的一般概念可以推广到离散空间。递增带有离散参数的目标函数被称为爬山（hill climbing）算法 
+
+### Jacobian和Hessian矩阵
+我们需要计算输入和输出都为向量的函数的所有偏导数。包含所有这样的
+偏导数的矩阵被称为Jacobian矩阵。具体来说，如果我们有一个函数：$\mathbf{f} : R^m  \rightarrow R^n$，
+$\mathbf{f}$的Jacobian矩阵$J \in R^{n\times m}$定义为 $\mathbf{J}_{i,j} = \frac{\partial}{\partial x_j}f(\mathbf{x})_i$
+二阶导数告诉我们，一阶导数将如何随着输入的变化而改变。它表示只基于梯度信息的梯度下降步骤是否会产生如我们预期的那样大的改善，因此它是重要的。
+当我们的函数具有多维输入时， 二阶导数也有很多。我们可以将这些导数合并成一个矩阵，称为Hessian矩阵。 
+$\mathbf{H}(f)(\mathbf{x})_{i,j} = \frac{\partial^2 }{\partial x_i \partial x_j}f(\mathbf{x})$
+
+### 牛顿法（二阶最优化算法）
+
+
 ## 参考文献
 - [SVD分解维基百科](https://en.wikipedia.org/wiki/Singular_value_decomposition)
 - [Fast RCNN paper](https://arxiv.org/abs/1504.08083)
