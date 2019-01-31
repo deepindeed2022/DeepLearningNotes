@@ -1,15 +1,54 @@
 # 物体检测算法
-
+深度学习让物体检测从实验室走到生活。基于深度学习的物体检测算法分类两大类。一类是像RCNN类似的两stage方法，将
+ROI的选择和对ROI的分类score过程。另外一类是类似YOLO将ROI的选择和最终打分实现端到端一步完成。
 ![@物体检测算法概览图](./images/Detection-All.png)
 
-## 基于region proposals的方法（Two-Stage方法）
+# 基于region proposals的方法（Two-Stage方法）
 - RCNN => Fast RCNN => Faster RCNN => FPN 
 - https://www.cnblogs.com/liaohuiqiang/p/9740382.html
 
-### faster RCNN
-![@faster RCNN的算法过程图](./images/FasterRCNN.png)
+## faster RCNN
+### 整体框架
+![@faster RCNN的算法框架](./images/FasterRCNN.png)
+我们先整体的介绍下上图中各层主要的功能
 
-## One-stage方法
+* **卷积网络提取特征图**：
+
+作为一种CNN网络目标检测方法，Faster RCNN首先使用一组基础的conv+relu+pooling层提取input image的feature maps,该feature maps会用于后续的RPN层和全连接层
+
+* **RPN(Region Proposal Networks)**:
+
+RPN网络主要用于生成region proposals，首先生成一堆Anchor box，对其进行裁剪过滤后通过softmax判断anchors属于前景(foreground)或者后景(background)，即是物体or不是物体，所以这是一个二分类；同时，另一分支bounding box regression修正anchor box，形成较精确的proposal（注：这里的较精确是相对于后面全连接层的再一次box regression而言）
+
+* **Roi Pooling**：
+
+该层利用RPN生成的proposals和VGG16最后一层得到的feature map，得到固定大小的proposal feature map,进入到后面可利用全连接操作来进行目标识别和定位
+
+* **Classifier**：
+
+会将ROI Pooling层形成固定大小的feature map进行全连接操作，利用Softmax进行具体类别的分类，同时，利用SmoothL1Loss完成bounding box regression回归操作获得物体的精确位置。
+
+![@FasterRCNN算法详细过程图](./images/FasterRCNN-Arch.png)
+
+### 参考链接
+https://www.cnblogs.com/wangyong/p/8513563.html
+
+## FPN(feature pyramid networks for object detection)
+- 论文链接：https://arxiv.org/abs/1612.03144
+
+### 论文概述：
+
+作者提出的多尺度的object detection算法：FPN（feature pyramid networks）。原来多数的object detection算法都是只采用顶层特征做预测，但我们知道低层的特征语义信息比较少，但是目标位置准确；高层的特征语义信息比较丰富，但是目标位置比较粗略。另外虽然也有些算法采用多尺度特征融合的方式，但是一般是采用融合后的特征做预测，而本文不一样的地方在于预测是在不同特征层独立进行的。
+
+![@FPN架构图](./images/FPN.jpeg)
+
+### 小结
+
+作者提出的FPN（Feature Pyramid Network）算法同时利用低层特征高分辨率和高层特征的高语义信息，通过融合这些不同层的特征达到预测的效果。并且预测是在每个融合后的特征层上单独进行的，这和常规的特征融合方式不同。 
+
+## Mask-RCNN
+
+# One-stage方法
 
 ### SSD原理与实现
 
