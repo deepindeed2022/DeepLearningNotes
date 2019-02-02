@@ -93,6 +93,21 @@ http://www.cs.unc.edu/~wliu/papers/ssd_eccv2016_slide.pdf
 - paper出处：https://arxiv.org/abs/1808.01244
 - https://zhuanlan.zhihu.com/p/46505759
 
+## RPN中的Anchor
+Anchor是RPN网络的核心。需要确定每个滑窗中心对应感受野内存在目标与否。由于目标大小和长宽比例不一，需要多个尺度的窗。Anchor即给出一个基准窗大小，按照倍数和长宽比例得到不同大小的窗。有了Anchor之后，才能通过Select Search的方法\Slide Windows方法进行选取ROI的。
+
+首先我们需要知道anchor的本质是什么，本质是SPP(spatial pyramid pooling)思想的逆向。而SPP本身是做什么的呢，就是将不同尺寸的输入resize成为相同尺寸的输出。所以SPP的逆向就是，将相同尺寸的输出，倒推得到不同尺寸的输入。
+
+接下来是anchor的窗口尺寸，这个不难理解，三个面积尺寸（128^2，256^2，512^2），然后在每个面积尺寸下，取三种不同的长宽比例（1:1,1:2,2:1）.这样一来，我们得到了一共9种面积尺寸各异的anchor。示意图如下：
+![@9个Anchor示意图](./images/Anchor.png)
+至于这个anchor到底是怎么用的，这个是理解整个问题的关键。
+
+* Faster RCNN
+* SSD 
+* YOLO
+* Guided Anchor: https://arxiv.org/abs/1901.03278
+
+
 ## NMS优化的必要性research
 
 ### R-CNN
