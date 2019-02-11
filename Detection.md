@@ -7,18 +7,30 @@ ROI的选择和对ROI的分类score过程。另外一类是类似YOLO将ROI的�
 - RCNN => Fast RCNN => Faster RCNN => FPN 
 - https://www.cnblogs.com/liaohuiqiang/p/9740382.html
 
-## faster RCNN
-### 整体框架
+## Faster RCNN
+- 论文链接：https://arxiv.org/pdf/1506.01497.pdf
+- 作者：Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun
+### Faster RCNN 整体框架
 ![@faster RCNN的算法框架](./images/FasterRCNN.png)
 我们先整体的介绍下上图中各层主要的功能
 
 * **卷积网络提取特征图**：
 
-作为一种CNN网络目标检测方法，Faster RCNN首先使用一组基础的conv+relu+pooling层提取input image的feature maps,该feature maps会用于后续的RPN层和全连接层
+作为一种CNN网络目标检测方法，Faster RCNN首先使用一组基础的conv+relu+pooling层提取input image的feature maps,该feature maps会用于后续的RPN层和全连接层。
 
-* **RPN(Region Proposal Networks)**:
+* **RPN(Region Proposal Networks,区域提议网络)**:
 
-RPN网络主要用于生成region proposals，首先生成一堆Anchor box，对其进行裁剪过滤后通过softmax判断anchors属于前景(foreground)或者后景(background)，即是物体or不是物体，所以这是一个二分类；同时，另一分支bounding box regression修正anchor box，形成较精确的proposal（注：这里的较精确是相对于后面全连接层的再一次box regression而言）
+RPN网络主要用于生成region proposals，
+- 首先生成一堆Anchor box，对其进行裁剪过滤后通过softmax判断anchors属于前景(foreground)或者后景(background)，即是物体or不是物体，所以这是一个二分类；
+- 另一分支bounding box regression修正anchor box，形成较精确的proposal（注：这里的较精确是相对于后面全连接层的再一次box regression而言）
+
+Feature Map进入RPN后，先经过一次$3*3$的卷积，同样，特征图大小依然是$60*40$,数量512，这样做的目的应该是进一步集中特征信息，接着看到两个全卷积,即kernel_size=1*1,p=0,stride=1;
+- cls layer 逐像素对其9个Anchor box进行二分类
+- reg layer 逐像素得到其9个Anchor box四个坐标信息
+
+特征图大小为60*40，所以会一共生成60*40*9=21600个Anchor box
+
+![@FasterRCNN-RPN](./images/FasterCNN-RPN.png)
 
 * **Roi Pooling**：
 
@@ -29,11 +41,15 @@ RPN网络主要用于生成region proposals，首先生成一堆Anchor box，对
 会将ROI Pooling层形成固定大小的feature map进行全连接操作，利用Softmax进行具体类别的分类，同时，利用SmoothL1Loss完成bounding box regression回归操作获得物体的精确位置。
 
 ![@FasterRCNN算法详细过程图](./images/FasterRCNN-Arch.png)
+![@FasterRCNN proposal&RPN Netscope](./images/FasterRCNNNetwork.png)
 
 ### 参考链接
-https://www.cnblogs.com/wangyong/p/8513563.html
+
+- https://www.cnblogs.com/wangyong/p/8513563.html
+- https://www.jianshu.com/p/00a6a6efd83d
 
 ## FPN(feature pyramid networks for object detection)
+
 - 论文链接：https://arxiv.org/abs/1612.03144
 - poster链接： https://vision.cornell.edu/se3/wp-content/uploads/2017/07/fpn-poster.pdf
 - caffe实现: https://github.com/unsky/FPN
