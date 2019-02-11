@@ -1,4 +1,8 @@
 # 物体检测算法
+
+- 声明：本文欢迎转发，但请保留原作者信息!
+- 作者: [曹文龙]
+
 深度学习让物体检测从实验室走到生活。基于深度学习的物体检测算法分类两大类。一类是像RCNN类似的两stage方法，将
 ROI的选择和对ROI的分类score过程。另外一类是类似YOLO将ROI的选择和最终打分实现端到端一步完成。
 ![@物体检测算法概览图](./images/Detection-All.png)
@@ -95,6 +99,10 @@ Feature Map进入RPN后，先经过一次$3*3$的卷积，同样，特征图大�
 作者提出的FPN（Feature Pyramid Network）算法同时利用低层特征高分辨率和高层特征的高语义信息，通过融合这些不同层的特征达到预测的效果。并且预测是在每个融合后的特征层上单独进行的，这和常规的特征融合方式不同。 
 
 ## Mask-RCNN
+- 论文地址：https://arxiv.org/abs/1703.06870
+- 作者：Kaiming He，Georgia Gkioxari，Piotr Dollar，Ross Girshick
+- FAIR Detectron：https://github.com/facebookresearch/Detectron
+- tensorflow: https://github.com/matterport/Mask_RCNN
 
 # One-stage方法
 
@@ -123,6 +131,42 @@ Anchor是RPN网络的核心。需要确定每个滑窗中心对应感受野内�
 * YOLO
 * Guided Anchor: https://arxiv.org/abs/1901.03278
 
+## Normalization
+
+![@归一化方法](./images/normalization-methods.jpg)
+每个子图表示一个feature map张量，以$N$为批处理轴，$C$为通道轴，$(H,W)$作为空间轴。其中蓝色区域内的像素使用相同的均值和方差进行归一化，并通过聚合计算获得这些像素的值。从示意图中可以看出，GN没有在N维度方向上进行拓展，因此batch size之间是独立的，GPU并行化容易得多。
+
+
+### Batch Normalization
+需要比较大的Batch Size，需要更强的计算硬件的支持。
+
+> A small batch leads to inaccurate estimation of the batch statistics, and reducing BN’s batch size increases the model error dramatically
+
+尤其是在某些需要高精度输入的任务中，BN有很大局限性。同时，BN的实现是在Batch size之间进行的，需要大量的数据交换。
+
+### Group Normalization
+> GN does not exploit the batch dimension, and its
+computation is independent of batch sizes.
+
+![@BN,LN,IN,GN result comparison](./images/GN-Results.png)
+从实验结果中可以看出在训练集合上GN的valid error低于BN，但是测试结果上逊色一些。这个
+可能是因为BN的均值和方差计算的时候，通过*随机批量抽样（stochastic batch sampling）*引入了不确定性因素，这有助于模型参数正则化。
+**而这种不确定性在GN方法中是缺失的，这个将来可能通过使用不同的正则化算法进行改进。**
+
+### LRN（Local Response Normalization）
+动机：
+在神经深武学有一个概念叫做侧抑制(lateral inhibitio)，指的是被激活的神经元抑制相邻的神经元。
+归一化的目的就是“抑制”，局部响应归一化就是借鉴侧抑制的思想来实现局部抑制，尤其是当我们使用ReLU
+的时候，这种侧抑制很管用。
+好处： 有利于增加泛化能力，做了平滑处理，识别率提高1~2%
+
+### 参考文献
+
+- [Batch Normalization: Accelerating Deep Network Training by  Reducing Internal Covariate Shift](https://arxiv.org/abs/1502.03167v2)
+- [Jimmy Lei Ba, Jamie Ryan Kiros, Geoffrey E. Hinton. Layer normalization.](https://arxiv.org/abs/1607.06450)
+- [Group Normalization](https://arxiv.org/pdf/1803.08494.pdf)
+- [AlexNet中提出的LRN](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)
+- [VGG：Very Deep Convolutional Networks for Large-Scale Image Recognition](https://arxiv.org/abs/1409.1556)
 
 ## NMS优化的必要性research
 
