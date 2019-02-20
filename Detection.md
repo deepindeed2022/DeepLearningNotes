@@ -208,6 +208,48 @@ SSD算法中是分为default box(下图中(b)中为default box示意图)和prior
 2. 推荐的框越多，定位准确的概率更高，但是计算量也是会增多
 3. 推荐的框往往远大于最终的定位的个数
 
+#### Non-Maximum Suppression (NMS)
+End-to-End Integration of a Convolutional Network, Deformable Parts Model and Non-Maximum Suppression
+
+- intro: CVPR 2015
+- arxiv: http://arxiv.org/abs/1411.5309
+- paper: http://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Wan_End-to-End_Integration_of_2015_CVPR_paper.pdf
+
+#### A convnet for non-maximum suppression**
+- arxiv: http://arxiv.org/abs/1511.06437
+
+#### Improving Object Detection With One Line of Code
+
+Soft-NMS – Improving Object Detection With One Line of Code
+
+- intro: ICCV 2017. University of Maryland
+- keywords: Soft-NMS
+- arxiv: https://arxiv.org/abs/1704.04503
+- github: https://github.com/bharatsingh430/soft-nms
+
+####  Softer-NMS: Rethinking Bounding Box Regression for Accurate Object Detection
+- intro: CMU & Megvii Inc. (Face++)
+- arxiv: https://arxiv.org/abs/1809.08545
+- github: https://github.com/yihui-he/softer-NMS
+
+#### Learning non-maximum suppression
+- intro: CVPR 2017
+- project page: https://www.mpi-inf.mpg.de/departments/computer-vision-and-multimodal-computing/research/object-recognition-and-scene-understanding/learning-nms/
+- arxiv: https://arxiv.org/abs/1705.02950
+- github: https://github.com/hosang/gossipnet
+
+####  Relation Networks for Object Detection
+- intro: CVPR 2018 oral
+- arxiv: https://arxiv.org/abs/1711.11575
+- github(official, MXNet): https://github.com/msracver/Relation-Networks-for-Object-Detection
+
+#### Learning Pairwise Relationship for Multi-object Detection in Crowded Scenes
+- keywords: Pairwise-NMS
+- arxiv: https://arxiv.org/abs/1901.03796
+
+#### Daedalus: Breaking Non-Maximum Suppression in Object Detection via Adversarial Examples
+- paper: https://arxiv.org/abs/1902.02067
+
 
 # 目标检测特殊层
 ## ROIpooling
