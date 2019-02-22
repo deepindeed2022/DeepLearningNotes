@@ -252,6 +252,64 @@ Soft-NMS – Improving Object Detection With One Line of Code
 
 
 # 目标检测特殊层
+## RPN（Region Proposals Network）
+在RPN出现以前，一般特征提取和ROI推荐是分开的。方法有很多
+![@proposal methods](./images/EffetiveProposal.png)
+- [What makes for effective detection proposals PAMI 2015](https://arxiv.org/pdf/1502.05082.pdf)
+
+这里是RPN的caffe prototxt代码，更多信息可以参考Faster RCNN的解析中的RPN部分。
+```json
+#========= RPN ============  
+# 到我们的RPN网络部分了，前面的都是共享的5层卷积层的部分  
+layer {  
+  name: "rpn_conv1"  
+  type: "Convolution"  
+  bottom: "conv5"  
+  top: "rpn_conv1"  
+  param { lr_mult: 1.0 }  
+  param { lr_mult: 2.0 }  
+  convolution_param {  
+    num_output: 256  
+    kernel_size: 3 pad: 1 stride: 1 #这里作者把每个滑窗3*3，通过3*3*256*256的卷积核输出256维，完整的输出其实是12*12*256,  
+    weight_filler { type: "gaussian" std: 0.01 }  
+    bias_filler { type: "constant" value: 0 }  
+  }  
+}  
+layer {  
+  name: "rpn_relu1"  
+  type: "ReLU"  
+  bottom: "rpn_conv1"  
+  top: "rpn_conv1"  
+}  
+layer {  
+  name: "rpn_cls_score"  
+  type: "Convolution"  
+  bottom: "rpn_conv1"  
+  top: "rpn_cls_score"  
+  param { lr_mult: 1.0 }  
+  param { lr_mult: 2.0 }  
+  convolution_param {  
+    num_output: 18   # 2(bg/fg) * 9(anchors)  
+    kernel_size: 1 pad: 0 stride: 1 #这里看的很清楚，作者通过1*1*256*18的卷积核，将前面的256维数据转换成了18个输出  
+    weight_filler { type: "gaussian" std: 0.01 }  
+    bias_filler { type: "constant" value: 0 }  
+  }  
+}  
+layer {  
+  name: "rpn_bbox_pred"  
+  type: "Convolution"  
+  bottom: "rpn_conv1"  
+  top: "rpn_bbox_pred"  
+  param { lr_mult: 1.0 }  
+  param { lr_mult: 2.0 }  
+  convolution_param {  
+    num_output: 36   # 4 * 9(anchors)  
+    kernel_size: 1 pad: 0 stride: 1 <span style="font-family: Arial, Helvetica, sans-serif;">#这里看的很清楚，作者通过1*1*256*36的卷积核，将前面的256维数据转换成了36个输出</span>  
+    weight_filler { type: "gaussian" std: 0.01 }  
+    bias_filler { type: "constant" value: 0 }  
+  }  
+}  
+```
 ## ROIpooling
 ROIs Pooling顾名思义，是Pooling层的一种，而且是针对RoIs的Pooling，他的特点是输入特征图尺寸不固定，但是输出特征图尺寸固定；
 
@@ -365,9 +423,11 @@ void ROIPoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   }
 }
 ```
+
+
 ## ROI Align
 ![@ROIAlign模块使用示意图](./images/ROIAlign-1.png)
-
+![](./images/MaskRCNN.png)
 为了解决ROI Pooling的上述缺点，作者提出了ROI Align这一改进的方法。ROI Align的思路很简单：取消量化操作，使用双线性内插的方法获得坐标为浮点数的像素点上的图像数值,从而将整个特征聚集过程转化为一个连续的操作。值得注意的是，在具体的算法操作上，ROI Align并不是简单地补充出候选区域边界上的坐标点，然后将这些坐标点进行池化，而是重新设计了一套比较优雅的流程，如下图所示：
 ![@浮点坐标计算过程](./images/ROIAlign-2.png)
 * 遍历每一个候选区域，保持浮点数边界不做量化。
@@ -380,6 +440,8 @@ void ROIPoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 > 通过双线性插值避免了量化操作，保存了原始ROI的空间分布，有效避免了误差的产生；小目标效果比较好
 
 
+## 总结
+ROI Pooling到ROIAlign是Faster RCNN到Mask RCNN过程中的一个重要区别。
 
 
 
@@ -426,3 +488,4 @@ $$Recall = \frac{TP}{TP + FN} = \frac{TP}{all-groundtruths}$$
 2. [附录中ROI的解释](http://www.cnblogs.com/rocbomb/p/4428946.html)
 3. [SSD算法](https://blog.csdn.net/u013989576/article/details/73439202/)
 4. [评估标准](https://github.com/cwlseu/Object-Detection-Metrics)
+
