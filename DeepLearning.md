@@ -53,10 +53,15 @@ PCA Jittering
 只发现mirror、scale、crop三种
 
 ### SSD中的数据增强
+http://cwlseu.github.io/2017/04/05/SSD-Data-Augmentation/
+
+### 海康威视MSCOCO比赛中的数据增强
 第一，对颜色的数据增强，包括色彩的饱和度、亮度和对比度等方面，主要从Facebook的代码里改过来的。
 第二，PCA Jittering，最早是由Alex在他2012年赢得ImageNet竞赛的那篇NIPS中提出来的. 我们首先按照RGB三个颜色通道计算了均值和标准差，对网络的输入数据进行规范化，随后我们在整个训练集上计算了协方差矩阵，进行特征分解，得到特征向量和特征值，用来做PCA Jittering。
 第三，在图像进行裁剪和缩放的时候，我们采用了随机的图像差值方式。
-第四， Crop Sampling，就是怎么从原始图像中进行缩放裁剪获得网络的输入。比较常用的有2种方法：一是使用Scale Jittering，VGG和ResNet模型的训练都用了这种方法。二是尺度和长宽比增强变换，最早是Google提出来训练他们的Inception网络的。我们对其进行了改进，提出Supervised Data Augmentation方法。
+第四， Crop Sampling，就是怎么从原始图像中进行缩放裁剪获得网络的输入。比较常用的有2种方法：
+- 是使用Scale Jittering，VGG和ResNet模型的训练都用了这种方法。
+- 二是尺度和长宽比增强变换，最早是Google提出来训练他们的Inception网络的。我们对其进行了改进，提出Supervised Data Augmentation方法。
 
 ### 可参考链接
 - [输入图像随机选择一块区域涂黑，《Random Erasing Data Augmentation》](https://arxiv.org/pdf/1511.05635.pdf)
@@ -66,4 +71,5 @@ PCA Jittering
 - https://github.com/kevinlin311tw/caffe-augmentation 
 - https://github.com/codebox/image_augmentor
 - https://github.com/aleju/imgaug.git
-- 
+- [The art of Data Augmentation](http://lib.stat.cmu.edu/~brian/905-2009/all-papers/01-jcgs-art.pdf)
+- [Augmentation for small object detection](https://arxiv.org/abs/1902.07296)
